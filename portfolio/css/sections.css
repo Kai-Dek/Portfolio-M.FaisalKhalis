@@ -10,11 +10,11 @@
 .scroll-cue:hover .scroll-cue__icon { transform: translateY(3px); background: var(--surface); }
 
 /* 02 ABOUT */
-.about__grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 6vw, 80px); align-items: end; }
+.about__grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 6vw, 80px); align-items: center; padding-bottom: 24px; }
 .about__left { display: flex; flex-direction: column; gap: 28px; }
 .manifesto { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
 .manifesto p { margin-top: 8px; font-size: .9rem; }
-.about__right { display: grid; gap: 16px; font-size: .95rem; padding-bottom: 32px; }
+.about__right { display: grid; gap: 16px; font-size: .95rem; }
 .note { border-left: 2px solid var(--ink); background: #f8f5f6; padding: 12px 16px; }
 .note h3 { font-size: .85rem; font-weight: 600; }
 .note p { font-size: .8rem; color: var(--ink-soft); margin-top: 4px; }
