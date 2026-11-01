@@ -1,100 +1,444 @@
-/* ===== Section 4 — Curated Domains: vertical service cards ===== */
+/* ==========================================================================
+   Section 04 · Curated Domains: Interactive Hover Expand Accordion
+   ========================================================================== */
+
 .cards {
   --card-gap: 16px;
-  --card-radius: 22px;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  --card-radius: 24px;
+  display: flex;
   gap: var(--card-gap);
+  width: 100%;
+  height: 560px;
+  align-items: stretch;
 }
 
+/* --- Card Base --- */
 .vcard {
   position: relative;
   isolation: isolate;
-  aspect-ratio: 3 / 7;
-  overflow: hidden;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
   border-radius: var(--card-radius);
-  border: 1px solid rgba(255, 255, 255, .55);
-  background: #8f9399;
-  box-shadow: 0 18px 40px -22px rgba(20, 24, 50, .55), 0 2px 6px rgba(20, 24, 50, .08);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+  background: #191e32;
   color: #fff;
-  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
-}
-.vcard:hover,
-.vcard:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 28px 48px -22px rgba(20, 24, 50, .6), 0 2px 8px rgba(20, 24, 50, .1);
+  cursor: pointer;
+  box-shadow: 0 16px 38px -18px rgba(10, 14, 30, 0.45), 0 2px 6px rgba(10, 14, 30, 0.08);
+  outline: none;
+  transition:
+    flex 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.45s var(--ease),
+    box-shadow 0.45s var(--ease),
+    border-color 0.45s var(--ease);
 }
 
-/* gambar full-bleed: hanya layer ini yang di-zoom, teks tetap stabil */
+.vcard:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* --- Hover Expand Interaction --- */
+/* Saat cursor masuk ke container .cards, kartu yang tidak di-hover sedikit mengecil */
+.cards:hover .vcard {
+  flex: 0.65 1 0;
+}
+
+/* Kartu yang sedang aktif/hover/fokus meluas dengan dramatis */
+.cards .vcard:hover,
+.cards .vcard:focus-within,
+.cards .vcard.is-active {
+  flex: 2.8 1 0;
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 28px 60px -20px rgba(10, 14, 30, 0.72),
+    0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+/* --- Background Image Layer --- */
 .vcard__media {
-  position: absolute; inset: 0; z-index: -2;
+  position: absolute;
+  inset: 0;
+  z-index: -2;
   background: center / cover no-repeat;
-  transition: transform .5s var(--ease);
+  filter: brightness(0.9);
+  transform: scale(1.02);
+  transition:
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.5s var(--ease);
 }
+
 .vcard:hover .vcard__media,
-.vcard:focus-within .vcard__media { transform: scale(1.07); }
+.vcard:focus-within .vcard__media,
+.vcard.is-active .vcard__media {
+  transform: scale(1.08);
+  filter: brightness(0.98);
+}
 
-.vcard[data-bg="law"]       .vcard__media { background-image: url("../assets/images/card-law.svg"); }
-.vcard[data-bg="archive"]   .vcard__media { background-image: url("../assets/images/card-archive.svg"); }
-.vcard[data-bg="developer"] .vcard__media { background-image: url("../assets/images/card-developer.svg"); }
-.vcard[data-bg="broker"]    .vcard__media { background-image: url("../assets/images/card-broker.svg"); }
+.vcard[data-bg="law"] .vcard__media {
+  background-image: url("../assets/images/law.jpg");
+  background-position: center 35%;
+}
 
-/* overlay gradient agar teks terbaca */
+.vcard[data-bg="archive"] .vcard__media {
+  background-image: url("../assets/images/archive.jpg");
+  background-position: center;
+}
+
+.vcard[data-bg="developer"] .vcard__media {
+  background-image: url("../assets/images/developer.jpg");
+  background-position: center;
+}
+
+.vcard[data-bg="broker"] .vcard__media {
+  background-image: url("../assets/images/commercial-broker.jpg");
+  background-position: center 25%;
+}
+
+/* --- Gradient Overlays (Tingkat kontras & keterbacaan teks) --- */
+/* Overlay dasar (keadaan diam) */
 .vcard::before {
-  content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(180deg, rgba(10, 14, 30, .38) 0%, rgba(10, 14, 30, .08) 38%, rgba(10, 14, 30, .28) 100%);
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 24, 0.45) 0%,
+    rgba(8, 11, 24, 0.15) 30%,
+    rgba(8, 11, 24, 0.78) 100%
+  );
+  transition: opacity 0.5s var(--ease);
+}
+
+/* Overlay sekunder saat expand untuk keterbacaan teks detail */
+.vcard__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 24, 0.68) 0%,
+    rgba(8, 11, 24, 0.38) 28%,
+    rgba(8, 11, 24, 0.88) 65%,
+    rgba(6, 9, 20, 0.98) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.55s var(--ease);
+  pointer-events: none;
+}
+
+.vcard:hover .vcard__overlay,
+.vcard:focus-within .vcard__overlay,
+.vcard.is-active .vcard__overlay {
+  opacity: 1;
+}
+
+/* --- Content Wrapper & Typography Hierarchy --- */
+.vcard__content {
+  position: absolute;
+  inset: 0;
+  padding: clamp(20px, 2.6vw, 30px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 1. TOP BAR (Nomor Urut & Eyebrow Badge) */
+.vcard__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .vcard__num {
-  position: absolute; top: 5.5%; left: 9%;
-  font-size: .8rem; font-weight: 500; letter-spacing: .04em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.vcard__badge {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.4s var(--ease);
+}
+
+.vcard:hover .vcard__badge,
+.vcard:focus-within .vcard__badge,
+.vcard.is-active .vcard__badge {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+/* 2. BODY & HEAD (Judul Domain & Subtitle) */
+.vcard__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
 }
 
 .vcard__head {
-  position: absolute; top: 18%; left: 0; right: 0;
-  padding: 0 5%;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
 }
+
 .vcard__title {
   font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
   font-weight: 800;
-  font-size: clamp(1.5rem, 2.9vw, 2.35rem);
   line-height: 1.05;
-  letter-spacing: -.005em;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, .25);
-  overflow-wrap: anywhere;
+  letter-spacing: -0.015em;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
 }
+
 .vcard__sub {
-  font-size: clamp(.68rem, 1vw, .8rem);
+  font-family: var(--font-body);
+  font-size: clamp(0.72rem, 1vw, 0.85rem);
   font-style: italic;
-  opacity: .85;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.01em;
+  line-height: 1.35;
 }
 
-/* --- Tablet: 2 kolom, proporsi kartu tetap --- */
+.vcard__divider {
+  width: 32px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  margin-top: 6px;
+  transition:
+    width 0.45s var(--ease),
+    background 0.45s var(--ease);
+}
+
+.vcard:hover .vcard__divider,
+.vcard:focus-within .vcard__divider,
+.vcard.is-active .vcard__divider {
+  width: 56px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* 3. DETAIL EXPAND (Deskripsi & Tag Keahlian) */
+.vcard__detail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(16px);
+  overflow: hidden;
+  pointer-events: none;
+  transition:
+    max-height 0.5s var(--ease),
+    opacity 0.4s var(--ease),
+    transform 0.45s var(--ease);
+}
+
+.vcard:hover .vcard__detail,
+.vcard:focus-within .vcard__detail,
+.vcard.is-active .vcard__detail {
+  max-height: 300px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0.12s;
+}
+
+.vcard__desc {
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 460px;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+
+.vcard__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vcard__tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  background: rgba(10, 14, 30, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+}
+
+/* 4. FOOTER CUE (Eksplorasi & Indikator Interaksi) */
+.vcard__foot {
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.4s var(--ease),
+    border-color 0.45s var(--ease);
+}
+
+.vcard:hover .vcard__foot,
+.vcard:focus-within .vcard__foot,
+.vcard.is-active .vcard__foot {
+  opacity: 1;
+  transform: translateY(0);
+  border-color: rgba(255, 255, 255, 0.28);
+  transition-delay: 0.18s;
+}
+
+.vcard__cue {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vcard__arrow {
+  display: inline-block;
+  transition: transform 0.3s var(--ease);
+}
+
+.vcard:hover .vcard__arrow,
+.vcard:focus-within .vcard__arrow,
+.vcard.is-active .vcard__arrow {
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+
+/* --- Tablet (960px ke bawah) --- */
 @media (max-width: 960px) {
-  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .vcard__title { font-size: clamp(1.7rem, 5vw, 2.4rem); }
-  .vcard__sub { font-size: .8rem; }
-}
-
-/* --- Mobile: horizontal scroll dengan snap --- */
-@media (max-width: 560px) {
   .cards {
-    --card-gap: 14px;
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    margin: 0 calc(var(--pad) * -1);
-    padding: 6px var(--pad) 22px;
-    scroll-padding: 0 var(--pad);
-    -webkit-overflow-scrolling: touch;
+    height: 520px;
   }
-  .vcard { flex: 0 0 72%; scroll-snap-align: center; }
-  .vcard__title { font-size: 1.9rem; }
+
+  .cards:hover .vcard {
+    flex: 0.55 1 0;
+  }
+
+  .cards .vcard:hover,
+  .cards .vcard:focus-within,
+  .cards .vcard.is-active {
+    flex: 3.2 1 0;
+  }
+
+  .vcard__title {
+    font-size: clamp(1.6rem, 3.8vw, 2.2rem);
+  }
+
+  .vcard__desc {
+    font-size: 0.8rem;
+  }
 }
 
+/* --- Mobile (640px ke bawah): Berubah menjadi Vertical Accordion Stack --- */
+@media (max-width: 640px) {
+  .cards {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    gap: 14px;
+  }
+
+  .vcard {
+    flex: none;
+    height: auto;
+    min-height: 120px;
+    border-radius: 18px;
+  }
+
+  .cards:hover .vcard {
+    flex: none;
+  }
+
+  .cards .vcard:hover,
+  .cards .vcard:focus-within,
+  .cards .vcard.is-active {
+    flex: none;
+    min-height: 380px;
+    transform: none;
+  }
+
+  .vcard__content {
+    padding: 20px;
+  }
+
+  .vcard__badge {
+    opacity: 1;
+    transform: none;
+  }
+
+  .vcard__title {
+    font-size: 1.85rem;
+  }
+
+  .vcard__desc {
+    font-size: 0.82rem;
+  }
+}
+
+/* --- Reduced Motion Preferences --- */
 @media (prefers-reduced-motion: reduce) {
-  .vcard:hover, .vcard:focus-within { transform: none; }
-  .vcard:hover .vcard__media, .vcard:focus-within .vcard__media { transform: none; }
+  .vcard,
+  .vcard__media,
+  .vcard__detail,
+  .vcard__badge,
+  .vcard__foot,
+  .vcard__arrow,
+  .vcard__divider {
+    transition: none !important;
+  }
+
+  .cards .vcard:hover,
+  .cards .vcard:focus-within,
+  .cards .vcard.is-active {
+    transform: none;
+  }
 }
