@@ -44,7 +44,7 @@
         </div>
 
         <figure class="hero__photo reveal">
-          <img src="assets/images/profile.svg" alt="Foto Muhammad Faisal Khalis" width="480" height="720" />
+          <img src="assets/images/profile.jpeg" alt="Foto Muhammad Faisal Khalis" width="480" height="720" />
         </figure>
       </div>
 
@@ -140,68 +140,55 @@
       </div>
     </section>
 
-    <!-- 04 · CURATED DOMAINS (accordion) -->
+    <!-- 04 · CURATED DOMAINS (vertical service cards) -->
     <section class="section domains" id="domains">
       <div class="meta-row">
-        <span class="meta"><b>04</b> // Interactive expandable panels</span>
-        <span class="meta">Hover / tap cards to expand full dossier</span>
+        <span class="meta"><b>04</b> // Service domains</span>
+        <span class="meta">Law · Archive · Developer · Broker</span>
       </div>
 
       <header class="domains__head reveal">
         <div>
           <h2 class="heading">Curated Domains</h2>
-          <p class="sub">Hover across cards to smoothly inspect project artifacts, technical stack, competencies, certified milestones, and field experience.</p>
+          <p class="sub">Four fields of practice: legal support, archival management, front-end development, and commercial brokerage.</p>
         </div>
-        <span class="chip">Fluid horizontal expansion [400–700ms]</span>
       </header>
 
-      <div class="accordion" data-accordion>
-        <article class="panel" data-bg="law">
-          <button class="panel__btn" type="button" aria-expanded="false" aria-controls="panel-law">
-            <span class="panel__num">01</span>
-            <span class="panel__title">Law</span>
-            <span class="panel__tag">Legal Support &amp; Administration</span>
-          </button>
-          <div class="panel__body" id="panel-law">
-            <p>Legal document filing, case administration, legal research, and support for legal aid activities.</p>
-            <ul><li>Legal research</li><li>Case administration</li><li>Document filing</li></ul>
-          </div>
+      <div class="cards reveal">
+        <article class="vcard" data-bg="law">
+          <div class="vcard__media" role="img" aria-label="Palu hakim di atas meja"></div>
+          <span class="vcard__num">01</span>
+          <header class="vcard__head">
+            <h3 class="vcard__title">Law</h3>
+            <p class="vcard__sub">Legal Support &amp; Administration</p>
+          </header>
         </article>
 
-        <article class="panel" data-bg="archive">
-          <button class="panel__btn" type="button" aria-expanded="false" aria-controls="panel-archive">
-            <span class="panel__num">02</span>
-            <span class="panel__title">Archive</span>
-            <span class="panel__tag">Technical &amp; Strategic</span>
-          </button>
-          <div class="panel__body" id="panel-archive">
-            <p>Archival classification, retention schedules, records management, and information organization.</p>
-            <ul><li>Classification code</li><li>Retention schedule</li><li>Records management</li></ul>
-          </div>
+        <article class="vcard" data-bg="archive">
+          <div class="vcard__media" role="img" aria-label="Folder arsip di atas meja kayu"></div>
+          <span class="vcard__num">02</span>
+          <header class="vcard__head">
+            <h3 class="vcard__title">Archive</h3>
+            <p class="vcard__sub">Technical &amp; Strategic</p>
+          </header>
         </article>
 
-        <article class="panel" data-bg="developer">
-          <button class="panel__btn" type="button" aria-expanded="false" aria-controls="panel-developer">
-            <span class="panel__num">03</span>
-            <span class="panel__title">Developer</span>
-            <span class="panel__tag">Front-End Web Development</span>
-          </button>
-          <div class="panel__body" id="panel-developer">
-            <p>Building clean, responsive websites with HTML, CSS, and JavaScript.</p>
-            <ul><li>HTML &amp; CSS</li><li>Vanilla JavaScript</li><li>Responsive layout</li></ul>
-          </div>
+        <article class="vcard" data-bg="developer">
+          <div class="vcard__media" role="img" aria-label="Laptop dengan kode program dan jam meja"></div>
+          <span class="vcard__num">03</span>
+          <header class="vcard__head">
+            <h3 class="vcard__title">Developer</h3>
+            <p class="vcard__sub">Front-End Web Development</p>
+          </header>
         </article>
 
-        <article class="panel" data-bg="broker">
-          <button class="panel__btn" type="button" aria-expanded="false" aria-controls="panel-broker">
-            <span class="panel__num">04</span>
-            <span class="panel__title">Commercial Broker</span>
-            <span class="panel__tag">Coal Trading &amp; Property Brokerage</span>
-          </button>
-          <div class="panel__body" id="panel-broker">
-            <p>Field experience in commodity trading and property brokerage negotiations.</p>
-            <ul><li>Coal trading</li><li>Property brokerage</li><li>Negotiation</li></ul>
-          </div>
+        <article class="vcard" data-bg="broker">
+          <div class="vcard__media" role="img" aria-label="Jabat tangan dalam suasana bisnis"></div>
+          <span class="vcard__num">04</span>
+          <header class="vcard__head">
+            <h3 class="vcard__title">Commercial Broker</h3>
+            <p class="vcard__sub">Coal Trading &amp; Property Brokerage</p>
+          </header>
         </article>
       </div>
     </section>
@@ -245,7 +232,6 @@
     </section>
 
   </main>
-  <script src="js/accordion.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

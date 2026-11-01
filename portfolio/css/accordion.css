@@ -1,62 +1,100 @@
-/* ===== Section 4 — horizontal expandable accordion ===== */
-.accordion { display: flex; gap: 12px; height: clamp(360px, 52vw, 480px); }
+/* ===== Section 4 — Curated Domains: vertical service cards ===== */
+.cards {
+  --card-gap: 16px;
+  --card-radius: 22px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--card-gap);
+}
 
-.panel {
+.vcard {
   position: relative;
-  flex: 1 1 0;
-  min-width: 0;
+  isolation: isolate;
+  aspect-ratio: 3 / 7;
   overflow: hidden;
-  border-radius: 18px;
-  background: #cfcfcf center / cover no-repeat;
-  box-shadow: 0 10px 28px -16px rgba(0,0,0,.4);
-  transition: flex-grow .6s var(--ease);
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(255, 255, 255, .55);
+  background: #8f9399;
+  box-shadow: 0 18px 40px -22px rgba(20, 24, 50, .55), 0 2px 6px rgba(20, 24, 50, .08);
+  color: #fff;
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
 }
-/* Ganti file gambar di sini kalau pakai foto asli (.jpg/.webp) */
-.panel[data-bg="law"]       { background-image: url("../assets/images/domain-law.svg"); }
-.panel[data-bg="archive"]   { background-image: url("../assets/images/domain-archive.svg"); }
-.panel[data-bg="developer"] { background-image: url("../assets/images/domain-developer.svg"); }
-.panel[data-bg="broker"]    { background-image: url("../assets/images/domain-broker.svg"); }
-
-.panel::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,14,40,.1) 0%, rgba(10,14,40,.72) 100%); }
-
-/* panel aktif melebar, yang lain otomatis menyusut */
-.panel.is-active { flex-grow: 4.2; }
-
-.panel__btn {
-  position: absolute; inset: 0; width: 100%;
-  display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
-  padding: 18px; border: 0; background: transparent; color: #fff; text-align: left; cursor: pointer; font: inherit;
+.vcard:hover,
+.vcard:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 48px -22px rgba(20, 24, 50, .6), 0 2px 8px rgba(20, 24, 50, .1);
 }
-.panel__num { font-size: .7rem; letter-spacing: .08em; opacity: .85; }
-.panel__title {
-  font-family: var(--font-display); font-weight: 800; line-height: 1;
-  font-size: clamp(1.1rem, 2.4vw, 1.9rem);
-  writing-mode: vertical-rl; transform: rotate(180deg);   /* vertikal saat panel sempit */
-  align-self: center; margin: auto 0;
+
+/* gambar full-bleed: hanya layer ini yang di-zoom, teks tetap stabil */
+.vcard__media {
+  position: absolute; inset: 0; z-index: -2;
+  background: center / cover no-repeat;
+  transition: transform .5s var(--ease);
 }
-.panel__tag { font-size: .7rem; opacity: 0; max-height: 0; overflow: hidden; transition: opacity .3s; }
+.vcard:hover .vcard__media,
+.vcard:focus-within .vcard__media { transform: scale(1.07); }
 
-.panel.is-active .panel__btn { justify-content: flex-start; gap: 8px; }
-.panel.is-active .panel__num { margin-bottom: auto; }
-.panel.is-active .panel__title { writing-mode: horizontal-tb; transform: none; align-self: flex-start; margin: 0; font-size: clamp(1.6rem, 3.4vw, 2.6rem); }
-.panel.is-active .panel__tag { opacity: .9; max-height: none; transition-delay: .25s; }
+.vcard[data-bg="law"]       .vcard__media { background-image: url("../assets/images/card-law.svg"); }
+.vcard[data-bg="archive"]   .vcard__media { background-image: url("../assets/images/card-archive.svg"); }
+.vcard[data-bg="developer"] .vcard__media { background-image: url("../assets/images/card-developer.svg"); }
+.vcard[data-bg="broker"]    .vcard__media { background-image: url("../assets/images/card-broker.svg"); }
 
-/* detail muncul setelah panel melebar */
-.panel__body {
-  position: absolute; left: 18px; right: 18px; bottom: 18px;
-  color: #fff; font-size: .82rem; pointer-events: none;
-  opacity: 0; transform: translateY(12px);
-  transition: opacity .25s, transform .4s var(--ease);
+/* overlay gradient agar teks terbaca */
+.vcard::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(10, 14, 30, .38) 0%, rgba(10, 14, 30, .08) 38%, rgba(10, 14, 30, .28) 100%);
 }
-.panel__body ul { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.panel__body li { padding: 3px 10px; border: 1px solid rgba(255,255,255,.5); border-radius: 999px; font-size: .68rem; }
-.panel.is-active .panel__body { opacity: 1; transform: none; transition-delay: .3s; }
 
-@media (max-width: 720px) {
-  .accordion { gap: 8px; height: 420px; }
-  .panel { border-radius: 14px; }
-  .panel.is-active { flex-grow: 5; }
-  .panel__btn { padding: 12px; }
-  .panel__body { left: 12px; right: 12px; bottom: 12px; font-size: .76rem; }
-  .panel__body p { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.vcard__num {
+  position: absolute; top: 5.5%; left: 9%;
+  font-size: .8rem; font-weight: 500; letter-spacing: .04em;
+}
+
+.vcard__head {
+  position: absolute; top: 18%; left: 0; right: 0;
+  padding: 0 5%;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  text-align: center;
+}
+.vcard__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 2.9vw, 2.35rem);
+  line-height: 1.05;
+  letter-spacing: -.005em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .25);
+  overflow-wrap: anywhere;
+}
+.vcard__sub {
+  font-size: clamp(.68rem, 1vw, .8rem);
+  font-style: italic;
+  opacity: .85;
+}
+
+/* --- Tablet: 2 kolom, proporsi kartu tetap --- */
+@media (max-width: 960px) {
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vcard__title { font-size: clamp(1.7rem, 5vw, 2.4rem); }
+  .vcard__sub { font-size: .8rem; }
+}
+
+/* --- Mobile: horizontal scroll dengan snap --- */
+@media (max-width: 560px) {
+  .cards {
+    --card-gap: 14px;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 0 calc(var(--pad) * -1);
+    padding: 6px var(--pad) 22px;
+    scroll-padding: 0 var(--pad);
+    -webkit-overflow-scrolling: touch;
+  }
+  .vcard { flex: 0 0 72%; scroll-snap-align: center; }
+  .vcard__title { font-size: 1.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vcard:hover, .vcard:focus-within { transform: none; }
+  .vcard:hover .vcard__media, .vcard:focus-within .vcard__media { transform: none; }
 }
