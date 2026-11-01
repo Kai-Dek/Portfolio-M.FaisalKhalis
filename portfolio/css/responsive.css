@@ -1,0 +1,12 @@
+@media (max-width: 860px) {
+  .hero__grid, .about__grid, .contact__grid { grid-template-columns: 1fr; }
+  .hero__photo { justify-self: start; width: min(70%, 300px); order: -1; }
+  .about__right { padding-bottom: 0; }
+}
+@media (max-width: 560px) {
+  .timeline::before { left: 5px; }
+  .timeline__item { grid-template-columns: 1fr; gap: 8px; padding-left: 28px; }
+  .timeline__item::before { left: 0; }
+  .facts { gap: 18px; }
+  .socials { grid-template-columns: 1fr; }
+}
